@@ -39,7 +39,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
-                        echo "aws account number ---> $AWS_ACCOUNT_NUMBER"
+                        echo "aws account number ---> $AWS_ECR_REPOSITORY"
                         sed -i "s/#APP_VERSION#/$APP_VERSION/g" ecs-task-definition.json
                         sed -i "s/#AWS_ACCOUNT_NUMBER#/$AWS_ACCOUNT_NUMBER/g" ecs-task-definition.json
                         aws ecs register-task-definition --cli-input-json file://ecs-task-definition.json
