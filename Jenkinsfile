@@ -1,5 +1,5 @@
 pipeline {
-    
+    agent any
     environment{
         APP_VERSION = "1.0.$BUILD_ID"
         APP_NAME    = "my-sample-website"
