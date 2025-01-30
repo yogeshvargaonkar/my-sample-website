@@ -16,8 +16,11 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker build -t $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION .'
-                sh 'echo $AWS_ECR_REPOSITORY'
+                sh '''
+                    docker build -t $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION .
+                    aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ECR_REPOSITORY
+                    docker push $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION
+                '''
             }
         }
 	}
