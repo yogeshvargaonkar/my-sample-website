@@ -3,7 +3,7 @@ pipeline {
     environment{
         APP_VERSION = "1.0.$BUILD_ID"
         APP_NAME    = "my-sample-website"
-
+        AWS_ECR_REPOSITORY = ${params.aws-account-number}. ".dkr.ecr.us-east-1.amazonaws.com/my-sample-website"
     }
 
 	stages {
@@ -17,6 +17,7 @@ pipeline {
             }
             steps {
                 sh 'docker build -t $APP_NAME:$APP_VERSION .'
+                sh 'echo $AWS_ECR_REPOSITORY'
             }
         }
 	}
