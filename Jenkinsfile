@@ -16,7 +16,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker build -t $APP_NAME:$APP_VERSION .'
+                sh 'docker build -t $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION .'
                 sh 'echo $AWS_ECR_REPOSITORY'
             }
         }
