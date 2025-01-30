@@ -4,6 +4,7 @@ pipeline {
         APP_VERSION = "1.0.$BUILD_ID"
         APP_NAME    = "my-sample-website"
         AWS_ECR_REPOSITORY = "${params.aws_account_number}.dkr.ecr.us-east-1.amazonaws.com/my-sample-website"
+        AWS_DEFAULT_REGION    = 'us-east-1'
     }
 
 	stages {
@@ -16,11 +17,13 @@ pipeline {
                 }
             }
             steps {
-                sh '''
-                    docker build -t $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION .
-                    aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ECR_REPOSITORY
-                    docker push $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION
-                '''
+                withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh '''
+                        docker build -t $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION .
+                        aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ECR_REPOSITORY
+                        docker push $AWS_ECR_REPOSITORY/$APP_NAME:$APP_VERSION
+                    '''
+                }
             }
         }
 	}
