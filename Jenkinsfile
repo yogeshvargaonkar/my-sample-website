@@ -3,7 +3,7 @@ pipeline {
     environment{
         APP_VERSION = "1.0.$BUILD_ID"
         APP_NAME    = "my-sample-website"
-        AWS_ACCOUNT_NUMBER = params.aws_account_number
+        AWS_ACCOUNT_NUMBER = ${params.aws_account_number}
         AWS_ECR_REPOSITORY = "${params.aws_account_number}.dkr.ecr.us-east-1.amazonaws.com/my-sample-website"
         AWS_DEFAULT_REGION    = 'us-east-1'
     }
