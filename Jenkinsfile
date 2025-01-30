@@ -26,5 +26,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Update ECS Task definition') {
+            agent{
+                docker{
+                    image 'my-aws-cli'
+                    reuseNode true
+                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
+                }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh '''
+                        aws ecs register-task-definition --cli-input-json file://ecs-task-definition.json
+                    '''
+                }
+            }
+        }
 	}
 }
